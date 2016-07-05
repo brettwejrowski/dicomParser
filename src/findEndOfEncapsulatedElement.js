@@ -10,6 +10,8 @@
  * @param element
  */
 
+const labelMapping = require('labelMapping');
+
 module.exports = function findEndOfEncapsulatedElement (byteStream, element, warnings) {
   if (byteStream === undefined) {
     throw "missing required parameter 'byteStream'";
@@ -23,7 +25,7 @@ module.exports = function findEndOfEncapsulatedElement (byteStream, element, war
   element.fragments = [];
 
   var basicOffsetTableItemTag = dicomParser.readTag(byteStream);
-  if (basicOffsetTableItemTag !== 'xfffee000') {
+  if (basicOffsetTableItemTag !== labelMapping.Item[0]) {
     throw "basic offset table not found";
   }
 
@@ -41,12 +43,12 @@ module.exports = function findEndOfEncapsulatedElement (byteStream, element, war
     var tag = dicomParser.readTag(byteStream),
         length = byteStream.readUint32();
 
-    if (tag === 'xfffee0dd') {
+    if (tag === labelMapping.SequenceDelimitationTag[0]) {
       byteStream.seek(length);
       element.length = byteStream.position - element.dataOffset;
       return;
     
-    } else if (tag === 'xfffee000') {
+    } else if (tag === labelMapping.Item[0]) {
       element.fragments.push({
         offset: byteStream.position - baseOffset - 8,
         position : byteStream.position,
@@ -75,7 +77,7 @@ module.exports = function findEndOfEncapsulatedElement (byteStream, element, war
   }
 
   if (warnings) {
-    warnings.push("pixel data element " + element.tag + " missing sequence delimiter tag xfffee0dd");
+    warnings.push("pixel data element " + element.tag + " missing sequence delimiter tag labelMapping.SequenceDelimitationTag[0]");
   }
 };
 

@@ -9,12 +9,12 @@ const findItemDelimitationItemAndSetElementLength = require('./findItemDelimitat
 
 function getDataLengthSizeInBytesForVR (vr) {
   switch (vr) {
-    case 'QB':
-    case 'OW':
-    case 'SQ':
-    case 'OF':
-    case 'UT':
-    case 'UN':
+    case valueRepresentations.OtherByteString:
+    case valueRepresentations.OtherWordString:
+    case valueRepresentations.SequenceOfItems:
+    case valueRepresentations.OtherFloatString:
+    case valueRepresentations.UnlimitedText:
+    case valueRepresentations.Unknown:
       return 4;
       break;
     default:
@@ -54,12 +54,12 @@ module.exports = function readDicomElementExplicit (byteStream, warnings, untilT
   }
 
   // if VR is SQ, parse the sequence items
-  if (element.vr === 'SQ') {
+  if (element.vr === valueRepresentations.SequenceOfItems) {
     readSequenceItemsExplicit(byteStream, element, warnings);
     return element;
   }
   if (element.length === 4294967295) {
-    if (element.tag === 'x7fe00010') {
+    if (element.tag === labelMapping.PixelData[0]) {
       findEndOfEncapsulatedElement(byteStream, element, warnings);
       return element;
     } else {

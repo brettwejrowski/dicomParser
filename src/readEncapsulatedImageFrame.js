@@ -36,7 +36,7 @@ function calculateNumberOfFragmentsForFrame(frameIndex, basicOffsetTable, fragme
  * how a basic offset table can be created for JPEG images
  *
  * @param dataSet - the dataSet containing the encapsulated pixel data
- * @param pixelDataElement - the pixel data element (x7fe00010) to extract the frame from
+ * @param pixelDataElement - the pixel data element (labelMapping.PixelData[0]) to extract the frame from
  * @param frameIndex - the zero based frame index
  * @param [basicOffsetTable] - optional array of starting offsets for frames
  * @param [fragments] - optional array of objects describing each fragment (offset, position, length)
@@ -64,8 +64,8 @@ module.exports = function readEncapsulatedImageFrame (dataSet, pixelDataElement,
     throw "'pixelDataElement' does not have basicOffsetTable";
   }
 
-  if (pixelDataElement.tag !== 'x7fe00010') {
-    throw "'pixelDataElement' refers to non pixel data tag (expected tag = x7fe00010'";
+  if (pixelDataElement.tag !== labelMapping.PixelData[0]) {
+    throw "'pixelDataElement' refers to non pixel data tag (expected tag = labelMapping.PixelData[0]'";
   }
 
   if (pixelDataElement.encapsulatedPixelData !== true) {

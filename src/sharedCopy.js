@@ -15,6 +15,6 @@ module.exports = function sharedCopy (byteArray, byteOffset, length) {
     return new Uint8Array(byteArray.buffer, byteArray.byteOffset + byteOffset, length);
   
   } else {
-    throw 'dicomParser.from: unknown type for byteArray';
+    throw 'unknown type for byteArray';
   }
 };

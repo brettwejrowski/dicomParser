@@ -20,7 +20,7 @@ function calculateBufferSize (fragments, startFragment, numFragments) {
  * the fragments you want to extract data from.  See
  *
  * @param dataSet - the dataSet containing the encapsulated pixel data
- * @param pixelDataElement - the pixel data element (x7fe00010) to extract the fragment data from
+ * @param pixelDataElement - the pixel data element (labelMapping.PixelData[0]) to extract the fragment data from
  * @param startFragmentIndex - zero based index of the first fragment to extract from
  * @param [numFragments] - the number of fragments to extract from, default is 1
  * @param [fragments] - optional array of objects describing each fragment (offset, position, length)
@@ -44,8 +44,8 @@ function readEncapsulatedPixelDataFromFragments (dataSet, pixelDataElement, star
   if (numFragments === undefined) {
     throw "missing required parameter 'numFragments'";
   }
-  if (pixelDataElement.tag !== 'x7fe00010') {
-    throw "parameter 'pixelDataElement' refers to non pixel data tag (expected tag = x7fe00010')";
+  if (pixelDataElement.tag !== labelMapping.PixelData[0]) {
+    throw "parameter 'pixelDataElement' refers to non pixel data tag (expected tag = labelMapping.PixelData[0]')";
   }
   if (pixelDataElement.encapsulatedPixelData !== true 
         || pixelDataElement.hadUndefinedLength !== true 
@@ -74,8 +74,8 @@ function readEncapsulatedPixelDataFromFragments (dataSet, pixelDataElement, star
 
   // seek past the basic offset table (no need to parse it again since we already have)
   var basicOffsetTable = readSequenceItem(byteStream);
-  if (basicOffsetTable.tag !== 'xfffee000') {
-    throw "missing basic offset table xfffee000";
+  if (basicOffsetTable.tag !== labelMapping.Item[0]) {
+    throw "missing basic offset table labelMapping.Item[0]";
   }
   byteStream.seek(basicOffsetTable.length);
 

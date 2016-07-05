@@ -43,8 +43,8 @@ module.exports = function createJPEGBasicOffsetTable (dataSet, pixelDataElement,
   if (pixelDataElement === undefined) {
     throw 'missing required parameter pixelDataElement';
   }
-  if (pixelDataElement.tag !== 'x7fe00010') {
-    throw "parameter 'pixelDataElement' refers to non pixel data tag (expected tag = x7fe00010'";
+  if (pixelDataElement.tag !== labelMapping.PixelData[0]) {
+    throw "parameter 'pixelDataElement' refers to non pixel data tag (expected tag = labelMapping.PixelData[0]'";
   }
   if (pixelDataElement.encapsulatedPixelData !== true) {
     throw "parameter 'pixelDataElement' refers to pixel data element that does not have encapsulated pixel data";

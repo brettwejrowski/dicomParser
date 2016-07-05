@@ -10,7 +10,7 @@
  *
  * @deprecated since version 1.6 - use readEncapsulatedPixelDataFromFragments() or readEncapsulatedImageFrame()
  * @param dataSet - the dataSet containing the encapsulated pixel data
- * @param pixelDataElement - the pixel data element (x7fe00010) to extract the frame from
+ * @param pixelDataElement - the pixel data element (labelMapping.PixelData[0]) to extract the frame from
  * @param frame - the zero based frame index
  * @returns {object} with the encapsulated pixel data
  */
@@ -42,8 +42,8 @@ module.exports = function readEncapsulatedPixelData (dataSet, pixelDataElement, 
     throw "missing required parameter 'frame'";
   }
 
-  if (pixelDataElement.tag !== 'x7fe00010') {
-    throw "parameter 'element' refers to non pixel data tag (expected tag = x7fe00010'";
+  if (pixelDataElement.tag !== labelMapping.PixelData[0]) {
+    throw "parameter 'element' refers to non pixel data tag (expected tag = labelMapping.PixelData[0]'";
   }
 
   if (pixelDataElement.encapsulatedPixelData !== true

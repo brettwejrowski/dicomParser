@@ -9,7 +9,7 @@ const findItemDelimitationItemAndSetElementLength = require('./findItemDelimitat
 function isSequence (element, byteStream, vrCallback) {
   // if a data dictionary callback was provided, use that to verify that the element is a sequence.
   if (typeof vrCallback !== 'undefined') {
-    return (vrCallback(element.tag) === 'SQ');
+    return (vrCallback(element.tag) === valueRepresentations.SequenceOfItems);
   }
   
   if ((byteStream.position + 4) <= byteStream.byteArray.length) {
@@ -19,7 +19,7 @@ function isSequence (element, byteStream, vrCallback) {
     // These are the tags that could potentially be found directly after a sequence start tag (the delimiter
     // is found in the case of an empty sequence). This is not 100% safe because a non-sequence item
     // could have data that has these bytes, but this is how to do it without a data dictionary.
-    return (nextTag === 'xfffee000') || (nextTag === 'xfffee0dd');
+    return (nextTag === labelMapping.Item[0]) || (nextTag === labelMapping.SequenceDelimitationTag[0]);
   }
   byteStream.warnings.push('eof encountered before finding sequence item tag or sequence delimiter tag in peeking to determine VR');
   return false;

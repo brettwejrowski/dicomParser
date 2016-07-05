@@ -34,7 +34,7 @@ function readDicomDataSetExplicitUndefinedLength(byteStream, warnings) {
 
     // we hit an item delimiter tag, return the current offset to mark
     // the end of this sequence item
-    if (element.tag === 'xfffee00d') {
+    if (element.tag === labelMapping.ItemDelimitationItem[0]) {
       return new DataSet(byteStream.byteArrayParser, byteStream.byteArray, elements);
     }
 
@@ -64,7 +64,7 @@ function readSQElementUndefinedLengthExplicit(byteStream, element, warnings) {
     // end reading this sequence if the next tag is the sequence delimitation item
     var nextTag = readTag(byteStream);
     byteStream.seek(-4);
-    if (nextTag === 'xfffee0dd') {
+    if (nextTag === labelMapping.SequenceDelimitationTag[0]) {
       // set the correct length
       element.length = byteStream.position - element.dataOffset;
       byteStream.seek(8);

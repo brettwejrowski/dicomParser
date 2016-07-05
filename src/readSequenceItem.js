@@ -10,6 +10,7 @@
  */
 
 const readTag = require('./readTag');
+const labelMapping = require('./labelMapping');
 
 module.exports = function readSequenceItem (byteStream) {
   if (byteStream === undefined) {
@@ -22,7 +23,7 @@ module.exports = function readSequenceItem (byteStream) {
     dataOffset :  byteStream.position
   };
 
-  if (element.tag !== 'xfffee000') {
+  if (element.tag !== labelMapping.Item[0]) {
     var startPosition = byteStream.position;
     throw "item tag (FFFE,E000) not found at offset " + startPosition;
   }

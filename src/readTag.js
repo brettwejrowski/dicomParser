@@ -4,7 +4,7 @@
 
 module.exports = function readTag (byteStream) {
   if (byteStream === undefined) {
-    throw "dicomParser.readTag: missing required parameter 'byteStream'";
+    throw "missing required parameter 'byteStream'";
   }
 
   var groupNumber = byteStream.readUint16() * 256 * 256, 

@@ -10,6 +10,7 @@
 *         elements successfully parsed before the error.
 */
 
+const UIDS = require("./UID_dictionary");
 const alloc = require("./alloc");
 const DataSet = require("./DataSet");
 const ByteStream = require("./ByteStream");
@@ -27,16 +28,16 @@ module.exports = function parseDicom (byteArray, options) {
   }
 
   function readTransferSyntax (metaHeaderDataSet) {
-    if (metaHeaderDataSet.elements.x00020010 === undefined) {
+    if (metaHeaderDataSet.elements[labelMapping.TransferSyntaxUID] === undefined) {
       throw 'missing required meta header attribute 0002,0010';
     }
-    var transferSyntaxElement = metaHeaderDataSet.elements.x00020010;
+    var transferSyntaxElement = metaHeaderDataSet.elements[labelMapping.TransferSyntaxUID[0]];
     return readFixedString(byteArray, transferSyntaxElement.dataOffset, transferSyntaxElement.length);
   }
 
   function isExplicit (transferSyntax) {
     // implicit little endian 
-    if (transferSyntax === '1.2.840.10008.1.2') {
+    if (transferSyntax === UIDS['Implicit VR Little Endian']) {
       return false;
     }
     // all other transfer syntaxes should be explicit
@@ -44,7 +45,7 @@ module.exports = function parseDicom (byteArray, options) {
   }
 
   function getDataSetByteStream (transferSyntax, position) {
-    if (transferSyntax === '1.2.840.10008.1.2.1.99') {
+    if (transferSyntax === UIDS['Deflated Explicit VR Little Endian']) {
       // if an infalter callback is registered, use it
       if (options && options.inflater) {
         var fullByteArrayCallback = options.inflater(byteArray, position);
@@ -86,7 +87,7 @@ module.exports = function parseDicom (byteArray, options) {
     }
     
     // explicit big endian 
-    if (transferSyntax === '1.2.840.10008.1.2.2') {
+    if (transferSyntax === UIDS['Explicit VR Big Endian']) {
       return new ByteStream(bigEndianByteArrayParser, byteArray, position);
     
     } else {
